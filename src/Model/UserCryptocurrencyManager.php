@@ -25,11 +25,76 @@ class UserCryptocurrencyManager
     public function addCryptocurrencyToUser(int $userId, Cryptocurrency $cryptocurrency, int $amount): void
     {
         // TODO
+
+        $amount_decrement=$amount;
+        if($amount_decrement<0) return;
+        $userCryptocurrency=$this->getUserCryptocurrency($userId,$cryptocurrency->getId());
+        if(!$userCryptocurrency){
+            $previous_amount=0;
+            $mode="insert";
+        }else{
+            $previous_amount=$userCryptocurrency->getAmount();
+            $mode="update";
+        }
+        $amount=$previous_amount+$amount_decrement;
+
+        if($mode=="update")
+        /*
+        UPDATE table_name
+        SET column1 = value1, column2 = value2, ...
+        WHERE condition;
+        */
+        $query = $this->database->prepare('UPDATE user_cryptocurrencies SET amount=:amount WHERE user_id = :user_id AND cryptocurrency_id = :cryptocurrency_id');
+
+        if($mode=="insert")
+        /*
+        INSERT INTO table_name (column1, column2, column3, ...)
+        VALUES (value1, value2, value3, ...);
+        */
+        $query = $this->database->prepare('INSERT INTO user_cryptocurrencies (amount,user_id,cryptocurrency_id) VALUES (:amount,:user_id,:cryptocurrency_id);');
+
+        $query->bindParam(':user_id', $userId, Database::PARAM_INT);
+        $query->bindParam(':cryptocurrency_id', $cryptocurrency->getId(), Database::PARAM_STR);
+        $query->bindParam(':amount', $amount, Database::PARAM_INT);
+        $query->execute();
     }
 
     public function subtractCryptocurrencyFromUser(int $userId, Cryptocurrency $cryptocurrency, int $amount): void
     {
         // TODO
+
+        $amount_decrement=$amount;
+        if($amount_decrement<0) return;
+        $userCryptocurrency=$this->getUserCryptocurrency($userId,$cryptocurrency->getId());
+        if(!$userCryptocurrency){
+            $previous_amount=0;
+            $mode="insert";
+        }else{
+            $previous_amount=$userCryptocurrency->getAmount();
+            $mode="update";
+        }
+        $amount=$previous_amount-$amount_decrement;
+        if($amount<0) return;
+
+        if($mode=="update")
+        /*
+        UPDATE table_name
+        SET column1 = value1, column2 = value2, ...
+        WHERE condition;
+        */
+        $query = $this->database->prepare('UPDATE user_cryptocurrencies SET amount=:amount WHERE user_id = :user_id AND cryptocurrency_id = :cryptocurrency_id');
+
+        if($mode=="insert")
+        /*
+        INSERT INTO table_name (column1, column2, column3, ...)
+        VALUES (value1, value2, value3, ...);
+        */
+        $query = $this->database->prepare('INSERT INTO user_cryptocurrencies (amount,user_id,cryptocurrency_id) VALUES (:amount,:user_id,:cryptocurrency_id);');
+
+        $query->bindParam(':user_id', $userId, Database::PARAM_INT);
+        $query->bindParam(':cryptocurrency_id', $cryptocurrency->getId(), Database::PARAM_STR);
+        $query->bindParam(':amount', $amount, Database::PARAM_INT);
+        $query->execute();
     }
 
     public function getUserCryptocurrency(int $userId, string $cryptocurrencyId): ?UserCryptocurrency
@@ -44,4 +109,5 @@ class UserCryptocurrencyManager
 
         return $result ?: null;
     }
+
 }

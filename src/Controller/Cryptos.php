@@ -33,12 +33,14 @@ class Cryptos
     {
         $user = $this->userManager->getByLogin((string) $_SESSION['login']);
         if (!$user) {
-            header('Location: /cryptos');
+            $_SESSION['flash'] = 'User not logged in!';
+            header('Location: /login');
             return;
         }
 
         $cryptocurrency = $this->cryptocurrencyManager->getCryptocurrencyById($id);
         if (!$cryptocurrency) {
+            $_SESSION['flash'] = 'Cryptocurrency not found by ID!';
             header('Location: /cryptos');
             return;
         }
@@ -52,6 +54,26 @@ class Cryptos
         // TODO
         // verify if user is logged in
         // use $this->userCryptocurrencyManager->addCryptocurrencyToUser() method
+
+        // verify if user is logged in
+        $user = $this->userManager->getByLogin((string) $_SESSION['login']);
+        if (!$user) {
+            $_SESSION['flash'] = 'User not logged in!';
+            header('Location: /login');
+            return;
+        }
+
+        // use $this->userCryptocurrencyManager->addCryptocurrencyToUser() method
+        $cryptocurrency = $this->cryptocurrencyManager->getCryptocurrencyById($id);
+        if (!$cryptocurrency) {
+            $_SESSION['flash'] = 'Cryptocurrency not found by ID!';
+            header('Location: /cryptos');
+            return;
+        }
+
+        $userId=$user->getId();
+        $amount=filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_INT);
+        $this->userCryptocurrencyManager->addCryptocurrencyToUser($userId,$cryptocurrency,$amount);
 
         header('Location: /cryptos');
     }
@@ -80,7 +102,27 @@ class Cryptos
         // verify if user is logged in
         // use $this->userCryptocurrencyManager->subtractCryptocurrencyFromUser() method
 
-        header('Location: /cryptos');
+        // verify if user is logged in
+        $user = $this->userManager->getByLogin((string) $_SESSION['login']);
+        if (!$user) {
+            $_SESSION['flash'] = 'User not logged in!';
+            header('Location: /login');
+            return;
+        }
+
+        // use $this->userCryptocurrencyManager->subtractCryptocurrencyFromUser() method
+        $cryptocurrency = $this->cryptocurrencyManager->getCryptocurrencyById($id);
+        if (!$cryptocurrency) {
+            $_SESSION['flash'] = 'Cryptocurrency not found by ID!';
+            header('Location: /cryptos');
+            return;
+        }
+
+        $userId=$user->getId();
+        $amount=filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_INT);
+        $this->userCryptocurrencyManager->subtractCryptocurrencyFromUser($userId,$cryptocurrency,$amount);
+        
+        header('Location: /account');
     }
 
     public function getCryptocurrencies(): array
