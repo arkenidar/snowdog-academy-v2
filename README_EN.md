@@ -56,7 +56,7 @@ For Docker-based environment:
 docker exec -it snowdog-academy_php_1 sh -c 'php console.php migrate_db'
 ```
 
-For environment running on the host machine (run from the mail folder):
+For environment running on the host machine (run from the main folder):
 ```
 php console.php migrate_db
 ```
