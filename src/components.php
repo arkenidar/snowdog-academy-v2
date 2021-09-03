@@ -14,6 +14,7 @@ use Snowdog\Academy\Menu\AccountMenu;
 use Snowdog\Academy\Menu\LoginMenu;
 use Snowdog\Academy\Menu\LogoutMenu;
 use Snowdog\Academy\Menu\RegisterMenu;
+use Snowdog\Academy\Menu\FundsMenu;
 use Snowdog\Academy\Repository\CommandRepository;
 use Snowdog\Academy\Repository\RouteRepository;
 
@@ -35,6 +36,7 @@ Menu::register(LoginMenu::class, 100);
 Menu::register(RegisterMenu::class, 200);
 Menu::register(AccountMenu::class, 200);
 Menu::register(LogoutMenu::class, 900);
+Menu::register(FundsMenu::class, 300);
 
 CommandRepository::registerCommand('test_db_connection', TestDbConnection::class, 'Tests database connection');
 CommandRepository::registerCommand('migrate_db', Migrate::class, 'Performs database migration');
