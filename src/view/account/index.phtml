@@ -9,7 +9,9 @@ require_once(__DIR__ . '/../common/header.phtml'); ?>
 
 <div class="container">
     <section id="your-funds" class="padded">
-        <h3>Your funds: <?= $this->getUser()->getFunds() ?> USD</h3>
+        <h3>Your funds: <?= $this->getUser()->getFunds() ?> USD
+        <a href="/funds">Add Funds</a>
+        </h3>
     </section>
     <section id="cryptos-list" class="padded">
         <h3>Your cryptocurrencies</h3>

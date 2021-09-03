@@ -1,0 +1,25 @@
+<?php
+
+require_once(__DIR__ . '/../common/header.phtml'); ?>
+
+<div class="container">
+    <section id="funds-form" class="padded">
+        <h3>Add Funds</h3>
+        <form method="post" action="/account/addFunds">
+            <div class="form-group">
+
+                <!-- non-negative float(2 decimals) amount -->
+                <input
+                name="amount" id="amount"
+                class="form-control" placeholder="Amount"
+                type="number" min="0" oninput="validity.valid||(value='')"
+                step="0.01"
+                >
+
+            </div>
+            <button type="submit" class="btn btn-success">Add Funds</button>
+        </form>
+    </section>
+</div>
+
+<?php require_once(__DIR__ . '/../common/footer.phtml'); ?>

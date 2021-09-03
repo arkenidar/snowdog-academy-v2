@@ -28,4 +28,9 @@ class User
     {
         return $this->funds;
     }
+    
+    public function setFunds(float $funds): void
+    {
+        $this->funds=$funds;
+    }
 }

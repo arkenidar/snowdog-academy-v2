@@ -44,4 +44,27 @@ class Account
     {
         return $this->user;
     }
+
+    public function addFunds() : void
+    {
+        // user
+        $user = $this->userManager->getByLogin($_SESSION['login']);
+        if (!$user) {
+            header('Location: /login');
+            return;
+        }
+        $this->user = $user;
+
+        // input
+        $amount=filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_FLOAT);
+        
+        // action
+        $previousFunds=$user->getFunds();
+        $funds=$previousFunds+$amount;
+        $this->userManager->setFunds($funds,$user);
+        
+        // output
+        $_SESSION["flash"] = "Added ".$amount." USD to previous funds (".$previousFunds." USD)";
+        header('Location: /account');
+    }
 }

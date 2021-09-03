@@ -10,6 +10,7 @@ use Snowdog\Academy\Controller\Index;
 use Snowdog\Academy\Controller\Login;
 use Snowdog\Academy\Controller\Register;
 use Snowdog\Academy\Controller\Cryptos;
+use Snowdog\Academy\Controller\Funds;
 use Snowdog\Academy\Menu\AccountMenu;
 use Snowdog\Academy\Menu\LoginMenu;
 use Snowdog\Academy\Menu\LogoutMenu;
@@ -31,6 +32,7 @@ RouteRepository::registerRoute('GET', '/cryptos/sell/{id}', Cryptos::class, 'sel
 RouteRepository::registerRoute('POST', '/cryptos/sell/{id}', Cryptos::class, 'sellPost');
 RouteRepository::registerRoute('GET', '/account', Account::class, 'index');
 RouteRepository::registerRoute('POST', '/account/addFunds', Account::class, 'addFunds');
+RouteRepository::registerRoute('GET', '/funds', Funds::class, 'index');
 
 Menu::register(LoginMenu::class, 100);
 Menu::register(RegisterMenu::class, 200);
