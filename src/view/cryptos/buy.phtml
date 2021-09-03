@@ -7,7 +7,15 @@ require_once(__DIR__ . '/../common/header.phtml'); ?>
         <h3>Buy <?= $this->cryptocurrency->getName() ?> (<?= $this->cryptocurrency->getSymbol() ?>)</h3>
         <form method="post" action="/cryptos/buy/<?= $this->cryptocurrency->getId() ?>">
             <div class="form-group">
-                <input type="text" class="form-control" id="amount" placeholder="Amount" name="amount">
+                <!-- <input type="text" class="form-control" id="amount" placeholder="Amount" name="amount"> -->
+
+                <!-- non-negative integer amount -->
+                <input
+                name="amount" id="amount"
+                class="form-control" placeholder="Amount"
+                type="number" min="0" oninput="validity.valid||(value='')"
+                >
+
             </div>
             <button type="submit" class="btn btn-success">Buy</button>
         </form>
