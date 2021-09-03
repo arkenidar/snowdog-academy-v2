@@ -26,45 +26,21 @@ class UserCryptocurrencyManager
     {
         // TODO
 
-        $amount_decrement=$amount;
-        if($amount_decrement<0) return;
-        $userCryptocurrency=$this->getUserCryptocurrency($userId,$cryptocurrency->getId());
-        if(!$userCryptocurrency){
-            $previous_amount=0;
-            $mode="insert";
-        }else{
-            $previous_amount=$userCryptocurrency->getAmount();
-            $mode="update";
-        }
-        $amount=$previous_amount+$amount_decrement;
-
-        if($mode=="update")
-        /*
-        UPDATE table_name
-        SET column1 = value1, column2 = value2, ...
-        WHERE condition;
-        */
-        $query = $this->database->prepare('UPDATE user_cryptocurrencies SET amount=:amount WHERE user_id = :user_id AND cryptocurrency_id = :cryptocurrency_id');
-
-        if($mode=="insert")
-        /*
-        INSERT INTO table_name (column1, column2, column3, ...)
-        VALUES (value1, value2, value3, ...);
-        */
-        $query = $this->database->prepare('INSERT INTO user_cryptocurrencies (amount,user_id,cryptocurrency_id) VALUES (:amount,:user_id,:cryptocurrency_id);');
-
-        $query->bindParam(':user_id', $userId, Database::PARAM_INT);
-        $query->bindParam(':cryptocurrency_id', $cryptocurrency->getId(), Database::PARAM_STR);
-        $query->bindParam(':amount', $amount, Database::PARAM_INT);
-        $query->execute();
+        $this->variateUserCryptocurrency($userId,$cryptocurrency,$amount,"add");
     }
 
     public function subtractCryptocurrencyFromUser(int $userId, Cryptocurrency $cryptocurrency, int $amount): void
     {
         // TODO
 
-        $amount_decrement=$amount;
-        if($amount_decrement<0) return;
+        $this->variateUserCryptocurrency($userId,$cryptocurrency,$amount,"subtract");
+    }
+
+    // trick: code reuse
+    public function variateUserCryptocurrency(int $userId, Cryptocurrency $cryptocurrency, int $amount, string $addOrSubtract) : void {
+        // TODO
+
+        if($amount<0) return;
         $userCryptocurrency=$this->getUserCryptocurrency($userId,$cryptocurrency->getId());
         if(!$userCryptocurrency){
             $previous_amount=0;
@@ -73,9 +49,14 @@ class UserCryptocurrencyManager
             $previous_amount=$userCryptocurrency->getAmount();
             $mode="update";
         }
-        $amount=$previous_amount-$amount_decrement;
-        if($amount<0) return;
 
+        if($addOrSubtract=="add"){
+            $amount=$previous_amount+$amount;
+        }elseif($addOrSubtract=="subtract"){
+            $amount=$previous_amount-$amount;
+            if($amount<0) return;    
+        }else return;
+        
         if($mode=="update")
         /*
         UPDATE table_name
