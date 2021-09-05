@@ -15,6 +15,9 @@ require_once(__DIR__ . '/../common/header.phtml'); ?>
     </section>
     <section id="cryptos-list" class="padded">
         <h3>Your cryptocurrencies</h3>
+        <?php if (count($this->getUserCryptocurrencies())==0): ?>
+        (empty, no currencies)    
+        <?php else: ?>
         <table class="table table-striped">
             <thead>
             <tr>
@@ -33,6 +36,7 @@ require_once(__DIR__ . '/../common/header.phtml'); ?>
             <?php endforeach; ?>
             </tbody>
         </table>
+        <?php endif; ?>
     </section>
 </div>
 
