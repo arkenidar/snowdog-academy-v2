@@ -73,7 +73,18 @@ class Cryptos
 
         $userId=$user->getId();
         $amount=filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_INT);
-        $this->userCryptocurrencyManager->addCryptocurrencyToUser($userId,$cryptocurrency,$amount);
+
+        if($amount>=0){
+            $difference=$cryptocurrency->getPrice()*$amount;
+            
+            $funds=$user->getFunds();
+            $funds=$funds-$difference;
+            if($funds>=0){
+                $this->userManager->setFunds($funds,$user);
+
+                $this->userCryptocurrencyManager->addCryptocurrencyToUser($userId,$cryptocurrency,$amount);
+            }         
+        }
 
         header('Location: /cryptos');
     }
