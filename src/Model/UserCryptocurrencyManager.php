@@ -57,24 +57,24 @@ class UserCryptocurrencyManager
             if($amount<0) return;    
         }else return;
         
-        if($mode=="update")
-        /*
-        UPDATE table_name
-        SET column1 = value1, column2 = value2, ...
-        WHERE condition;
-        */
-        $query = $this->database->prepare('UPDATE user_cryptocurrencies SET amount=:amount WHERE user_id = :user_id AND cryptocurrency_id = :cryptocurrency_id');
+        if($mode=="update"){
+            $where=' WHERE user_id=:user_id AND cryptocurrency_id=:cryptocurrency_id';
+            if($amount==0){
+                $sql='DELETE FROM user_cryptocurrencies'.$where;
+            }else{
+                $sql='UPDATE user_cryptocurrencies SET amount=:amount'.$where;
+            }
+        }
 
-        if($mode=="insert")
-        /*
-        INSERT INTO table_name (column1, column2, column3, ...)
-        VALUES (value1, value2, value3, ...);
-        */
-        $query = $this->database->prepare('INSERT INTO user_cryptocurrencies (amount,user_id,cryptocurrency_id) VALUES (:amount,:user_id,:cryptocurrency_id);');
-
+        if($mode=="insert"){
+            if($amount==0) return;
+            $sql='INSERT INTO user_cryptocurrencies (amount,user_id,cryptocurrency_id) VALUES (:amount,:user_id,:cryptocurrency_id)';
+        }
+        $query = $this->database->prepare($sql);
+        if($amount!=0) $query->bindParam(':amount', $amount, Database::PARAM_INT);
         $query->bindParam(':user_id', $userId, Database::PARAM_INT);
-        $query->bindParam(':cryptocurrency_id', $cryptocurrency->getId(), Database::PARAM_STR);
-        $query->bindParam(':amount', $amount, Database::PARAM_INT);
+        $cryptocurrencyId=$cryptocurrency->getId();
+        $query->bindParam(':cryptocurrency_id', $cryptocurrencyId, Database::PARAM_STR);
         $query->execute();
     }
 
