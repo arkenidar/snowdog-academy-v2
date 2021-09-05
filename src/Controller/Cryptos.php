@@ -120,8 +120,17 @@ class Cryptos
 
         $userId=$user->getId();
         $amount=filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_INT);
-        $this->userCryptocurrencyManager->subtractCryptocurrencyFromUser($userId,$cryptocurrency,$amount);
         
+        if($amount>=0){
+            $difference=$cryptocurrency->getPrice()*$amount;
+            
+            $funds=$user->getFunds();
+            $funds=$funds+$difference;
+            $this->userManager->setFunds($funds,$user);
+
+            $this->userCryptocurrencyManager->subtractCryptocurrencyFromUser($userId,$cryptocurrency,$amount);
+        }
+
         header('Location: /account');
     }
 
