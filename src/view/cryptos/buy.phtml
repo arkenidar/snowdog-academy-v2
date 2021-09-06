@@ -9,9 +9,26 @@ require_once(__DIR__ . '/../common/header.phtml'); ?>
         let price=<?= $cryptocurrency->getPrice() ?>;
         let funds=<?= $user->getFunds() ?>;
         let payment=buy_amount*price
+        
         let allowed=payment<=funds
         if(!allowed) alert("not allowed: not enough funds! funds:"+funds+" payment:"+payment)
         return allowed
+    }
+    function onAmountInput(event){
+
+        let input=event.target
+
+        //input.validity.valid||(input.value='')
+        if(!input.validity.valid) input.value=''
+
+        let buy_amount=parseInt(amount.value)
+        let price=<?= $cryptocurrency->getPrice() ?>;
+        let funds=<?= $user->getFunds() ?>;
+        let payment=buy_amount*price
+
+        buy_submit.innerHTML='Buy ('+payment+' USD)'
+        
+        return true
     }
     </script>
     <section id="buy-form" class="padded">
@@ -26,11 +43,11 @@ require_once(__DIR__ . '/../common/header.phtml'); ?>
                 <input
                 name="amount" id="amount"
                 class="form-control" placeholder="Amount"
-                type="number" min="0" oninput="validity.valid||(value='')"
+                type="number" min="0" oninput="return onAmountInput(event)"
                 >
 
             </div>
-            <button type="submit" class="btn btn-success">Buy</button>
+            <button type="submit" class="btn btn-success" id="buy_submit">Buy</button>
         </form>
     </section>
 </div>
