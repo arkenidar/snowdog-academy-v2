@@ -28,6 +28,10 @@ require_once(__DIR__ . '/../common/header.phtml'); ?>
 
         buy_submit.innerHTML='Buy ('+payment+' USD)'
         
+        let allowed=payment<=funds
+        buy_submit.className='btn btn-success'
+        if(!allowed) buy_submit.className+=' disabled'
+
         return true
     }
     </script>
