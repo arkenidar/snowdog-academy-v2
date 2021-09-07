@@ -132,7 +132,9 @@ class Cryptos
         $userId=$user->getId();
         $amount=filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_INT);
         
-        if($amount>=0){
+        $available=$this->userCryptocurrencyManager->getUserCryptocurrency($userId,$id)->getAmount();
+
+        if($amount>=0 && $amount<=$available){
             $difference=$cryptocurrency->getPrice()*$amount;
             
             $funds=$user->getFunds();
