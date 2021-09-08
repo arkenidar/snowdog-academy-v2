@@ -134,7 +134,7 @@ class Cryptos
         
         $available=$this->userCryptocurrencyManager->getUserCryptocurrency($userId,$id)->getAmount();
 
-        if($amount>=0 && $amount<=$available){
+        if($amount>=0 && $amount<=$available){ // input validity check (selling)
             $difference=$cryptocurrency->getPrice()*$amount;
             
             $funds=$user->getFunds();
@@ -142,6 +142,8 @@ class Cryptos
             $this->userManager->setFunds($funds,$user);
 
             $this->userCryptocurrencyManager->subtractCryptocurrencyFromUser($userId,$cryptocurrency,$amount);
+        }else{
+            $_SESSION['flash']='Error: not a valid amount for selling!';
         }
 
         header('Location: /account');
