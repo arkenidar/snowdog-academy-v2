@@ -74,17 +74,23 @@ class Cryptos
         $userId=$user->getId();
         $amount=filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_INT);
 
-        if($amount>=0){
+        if($amount>=0){ // input validity check (buying)
             $difference=$cryptocurrency->getPrice()*$amount;
             
             $funds=$user->getFunds();
             $funds=$funds-$difference;
-            if($funds>=0){
+            if($funds>=0){  // input validity check (buying)
                 $this->userManager->setFunds($funds,$user);
 
                 $this->userCryptocurrencyManager->addCryptocurrencyToUser($userId,$cryptocurrency,$amount);
-            }         
+            }else{
+                $_SESSION['flash']='Error: not a valid amount for buying! Reason: not enough funds.';
+            }
+          
+        }else{
+            $_SESSION['flash']='Error: not a valid amount for buying! Reason: negative amount.';
         }
+
 
         header('Location: /cryptos');
     }
@@ -143,7 +149,7 @@ class Cryptos
 
             $this->userCryptocurrencyManager->subtractCryptocurrencyFromUser($userId,$cryptocurrency,$amount);
         }else{
-            $_SESSION['flash']='Error: not a valid amount for selling!';
+            $_SESSION['flash']='Error: not a valid amount for selling! Reason: out of range.';
         }
 
         header('Location: /account');
