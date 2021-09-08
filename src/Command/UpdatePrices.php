@@ -31,6 +31,12 @@ class UpdatePrices
         $items=[];
         foreach($json->data as $item) $items[$item->id]=$item->rateUsd;
      
+        $currenciesTable=$this->cryptocurrencyManager->getAllCryptocurrencies();
+        $currencies=[];
+        foreach($currenciesTable as $currency)
+            $currencies[]=$currency->getId();
+
+        if(false) // don't use hardcoded id, left for reference
         $currencies=[
         'bitcoin',
         'bitcoin-cash',
