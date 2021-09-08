@@ -84,10 +84,12 @@ class Cryptos
 
                 $this->userCryptocurrencyManager->addCryptocurrencyToUser($userId,$cryptocurrency,$amount);
             }else{
+                // input validity check (buying)
                 $_SESSION['flash']='Error: not a valid amount for buying! Reason: not enough funds.';
             }
           
         }else{
+            // input validity check (buying)
             $_SESSION['flash']='Error: not a valid amount for buying! Reason: negative amount.';
         }
 
