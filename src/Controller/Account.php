@@ -58,6 +58,14 @@ class Account
         // input
         $amount=filter_input(INPUT_POST, 'amount', FILTER_VALIDATE_FLOAT);
         
+        // input validity check (adding funds)
+        if($amount<0){
+            // output
+            $_SESSION['flash']='Error: not a valid amount for adding funds! Reason: amount cannot be negative.';
+            header('Location: /funds');
+            return;
+        }
+
         // action
         $previousFunds=$user->getFunds();
         $funds=$previousFunds+$amount;
