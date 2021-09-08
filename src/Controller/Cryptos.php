@@ -149,7 +149,10 @@ class Cryptos
 
             $this->userCryptocurrencyManager->subtractCryptocurrencyFromUser($userId,$cryptocurrency,$amount);
         }else{
+            // input validity check (selling)
             $_SESSION['flash']='Error: not a valid amount for selling! Reason: out of range.';
+            header('Location: /cryptos/sell/'.$id);
+            return;
         }
 
         header('Location: /account');

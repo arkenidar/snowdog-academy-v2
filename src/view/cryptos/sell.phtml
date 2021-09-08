@@ -3,9 +3,45 @@
 require_once(__DIR__ . '/../common/header.phtml'); ?>
 
 <div class="container">
+    <script>
+    <?php
+    $userId=$user->getId();
+    $id=$cryptocurrency->getId();
+    ?>
+    function onSubmitCheck(){
+        let sell_amount=parseInt(amount.value)
+        if(isNaN(sell_amount)) sell_amount=0
+        let available=<?=$this->userCryptocurrencyManager->getUserCryptocurrency($userId,$id)->getAmount()?>
+        
+        let allowed=sell_amount<=available && sell_amount>=0
+        if(!allowed) alert("not allowed: not enough available for selling! available:"+available+" selling amount:"+sell_amount)
+        return allowed
+    }
+    function onAmountInput(event){
+
+        let input=event.target
+
+        //input.validity.valid||(input.value='')
+        if(!input.validity.valid) input.value=''
+
+        let sell_amount=parseInt(amount.value)
+        if(isNaN(sell_amount)) sell_amount=0
+        let available=<?=$this->userCryptocurrencyManager->getUserCryptocurrency($userId,$id)->getAmount()?>
+
+        sell_submit.innerHTML='Sell ('+sell_amount+')'
+        
+        let allowed=sell_amount<=available && sell_amount>=0
+        sell_submit.className='btn btn-success'
+        if(!allowed) sell_submit.className+=' disabled'
+
+        return true
+    }
+    </script>
     <section id="sell-form" class="padded">
         <h3>Sell <?= $this->cryptocurrency->getName() ?> (<?= $this->cryptocurrency->getSymbol() ?>)</h3>
-        <form method="post" action="/cryptos/sell/<?= $this->cryptocurrency->getId() ?>">
+        <form method="post" action="/cryptos/sell/<?= $this->cryptocurrency->getId() ?>"
+        onsubmit="return onSubmitCheck()"
+        >
             <div class="form-group">
                 <!-- <input type="text" class="form-control" id="amount" placeholder="Amount" name="amount"> -->
 
@@ -13,12 +49,12 @@ require_once(__DIR__ . '/../common/header.phtml'); ?>
                 <input
                 name="amount" id="amount"
                 class="form-control" placeholder="Amount"
-                type="number" min="0" oninput="validity.valid||(value='')"
+                type="number" min="0" oninput="return onAmountInput(event)"
                 autocomplete="off"
                 >
 
             </div>
-            <button type="submit" class="btn btn-success">Sell</button>
+            <button type="submit" class="btn btn-success" id="sell_submit">Sell</button>
         </form>
     </section>
 </div>
