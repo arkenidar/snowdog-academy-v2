@@ -3,9 +3,20 @@
 require_once(__DIR__ . '/../common/header.phtml'); ?>
 
 <div class="container">
+    <script>
+    function onSubmitCheck(){
+        let add_funds_amount=parseInt(amount.value)
+        if(isNaN(add_funds_amount)) add_funds_amount=0
+        let allowed=add_funds_amount>=0
+        if(!allowed) alert("not allowed: no negative amount possible for adding to funds!")
+        return allowed
+    }
+    </script>
     <section id="funds-form" class="padded">
         <h3>Add Funds</h3>
-        <form method="post" action="/account/addFunds">
+        <form method="post" action="/account/addFunds"
+        onsubmit="return onSubmitCheck()"
+        >
             <div class="form-group">
 
                 <!-- non-negative float(2 decimals) amount -->
