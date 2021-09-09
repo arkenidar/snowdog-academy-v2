@@ -6,6 +6,7 @@ require_once(__DIR__ . '/../common/header.phtml'); ?>
     <script>
     function onSubmitCheck(){
         let buy_amount=parseInt(amount.value)
+        if(isNaN(buy_amount)) buy_amount=0
         let price=<?= $cryptocurrency->getPrice() ?>;
         let funds=<?= $user->getFunds() ?>;
         let payment=buy_amount*price
@@ -22,6 +23,7 @@ require_once(__DIR__ . '/../common/header.phtml'); ?>
         if(!input.validity.valid) input.value=''
 
         let buy_amount=parseInt(amount.value)
+        if(isNaN(buy_amount)) buy_amount=0
         let price=<?= $cryptocurrency->getPrice() ?>;
         let funds=<?= $user->getFunds() ?>;
         let payment=buy_amount*price
